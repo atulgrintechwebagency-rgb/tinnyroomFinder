@@ -1,0 +1,142 @@
+.footer{
+    background:#fff;
+    padding:40px 0 20px;
+    border-top:1px solid #e9ecef;
+}
+
+.footer-logo{
+    width: 250px;
+}
+
+.footer h6{
+    font-size:14px;
+    font-weight:700;
+    margin-bottom:18px;
+    color:var(--dark-color);
+    text-transform:uppercase;
+}
+
+.footer ul{
+    padding:0;
+    margin:0;
+}
+
+.footer ul li{
+    margin-bottom:10px;
+}
+
+.footer ul li a{
+    color:#6c757d;
+    transition:.3s;
+    font-size:14px;
+}
+
+.footer ul li a:hover{
+    color:var(--primary-color);
+}
+
+.footer p{
+    font-size:14px;
+    color:#6c757d;
+}
+
+.newsletter{
+    display:flex;
+    margin-top:18px;
+    gap: 10px;
+}
+
+.newsletter input{
+     border:1px solid #ddd;
+    border-radius:8px;
+    padding:10px 14px;
+        font-size:14px;
+        width: 180px;
+}
+
+.newsletter button{
+    background:var(--primary-color);
+    color:#fff;
+    padding:10px 18px;
+    font-size:14px;
+    font-weight:600;
+    border-radius: 8px;
+}
+
+.footer-bottom{
+    margin-top:30px;
+    padding-top:20px;
+    border-top:1px solid #eee;
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.footer-bottom p{
+    margin:0;
+    font-size:14px;
+}
+
+.social-icons{
+    display:flex;
+    gap:14px;
+}
+
+.social-icons a{
+
+    width:36px;
+    height:36px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    background:#F5F8FA;
+    border-radius:50%;
+
+    color:var(--primary-color);
+
+    transition:.3s;
+}
+
+.social-icons a:hover{
+
+    background:var(--primary-color);
+    color:#fff;
+
+}
+.footer_items {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding-right: 50px;
+}
+@media(max-width:767px){
+    .footer_items{
+        flex-direction: column;
+    }
+}
+
+@media(max-width:991px){
+
+
+.footer-bottom{
+
+flex-direction:column;
+gap:20px;
+text-align:center;
+
+}
+.newsletter button{
+
+width:fit-content;
+
+}
+.footer-logo{
+    width:220px;
+}
+.footer {
+    padding: 50px 0 20px;
+}
+}

@@ -1,0 +1,289 @@
+/* HERO*/
+
+.terms-hero{
+    background:linear-gradient(180deg,#f6fbff 0%,#eef8f7 100%);
+    padding:80px 0 60px;
+    text-align:center;
+}
+
+.terms-hero h1{
+    font-size:30px;
+    font-weight:700;
+    color:#0f2d52;
+    margin-bottom:12px;
+}
+
+.terms-hero p{
+    max-width:760px;
+    margin:auto;
+    color:#667085;
+    font-size:16px;
+    line-height:30px;
+}
+
+
+/* SECTION */
+
+.terms-section{
+    background:#f7f8fa;
+    padding:70px 0;
+}
+
+
+/* SIDEBAR */
+
+.terms-sidebar{
+    position:sticky;
+    top:100px;
+    background:#fff;
+    border-radius:18px;
+    padding:24px;
+    box-shadow:0 10px 30px rgba(0,0,0,.06);
+}
+
+.terms-sidebar h3{
+    font-size:22px;
+    color:#0f2d52;
+    margin-bottom:20px;
+    font-weight:600;
+}
+
+.terms-sidebar ul{
+    list-style:none;
+    margin:0;
+    padding:0;
+}
+
+.terms-sidebar li{
+    margin-bottom:8px;
+}
+
+.terms-sidebar li:last-child{
+    margin-bottom:0;
+}
+
+.terms-sidebar li button{
+    width:100%;
+    display:flex;
+    align-items:flex-start;
+    gap:5px;
+    border:none;
+    background:transparent;
+    border-radius:10px;
+    padding:10px 10px;
+    cursor:pointer;
+    transition:.3s;
+    text-align:left;
+    color:#475467;
+    font-size:15px;
+    line-height:24px;
+}
+
+/* .terms-sidebar li button:hover{
+    background:#eef9f8;
+    color:#16b3ae;
+} */
+
+.terms-sidebar li.active button{
+    background:#16b3ae;
+    color:#fff;
+}
+
+.terms-sidebar li span{
+    min-width:22px;
+    font-weight:700;
+}
+
+
+/* CONTENT CARD*/
+
+.terms-card{
+    background:#fff;
+    border-radius:18px;
+    padding:40px;
+    box-shadow:0 10px 30px rgba(0,0,0,.06);
+}
+
+.terms-card h2{
+    text-align:center;
+    color:#0f2d52;
+    font-size:32px;
+    font-weight:700;
+    margin-bottom:15px;
+}
+
+.terms-card .intro{
+    margin:0 auto 30px;
+    color:#667085;
+    line-height:30px;
+}
+
+
+/* CONTENT SECTIONS*/
+
+.terms-item{
+    scroll-margin-top:110px;
+    padding:20px 0;
+    border-bottom:1px solid #ececec;
+}
+.terms-sidebar li button{
+    width:100%;
+    display:flex;
+    align-items:flex-start;
+    gap:8px;
+    border:none;
+    outline:none;
+    background:transparent;
+    border-radius:10px;
+    padding:10px 12px;
+    cursor:pointer;
+    transition:all .3s ease;
+    text-align:left;
+    color:#475467;
+    font-size:15px;
+    line-height:24px;
+}
+
+.terms-sidebar li.active button{
+    background:#16b3ae;
+    color:#fff;
+}
+
+/* .terms-sidebar li button:hover{
+    background:#eef9f8;
+    color:#16b3ae;
+} */
+.terms-item:last-child{
+    border-bottom:none;
+}
+
+.terms-item h4{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    margin-bottom:10px;
+    font-size:18px;
+    color:#0f2d52;
+    font-weight:600;
+    border-left:3px solid #16b3ae;
+    padding-left:12px;
+}
+
+.terms-item h4 span{
+    color:#16b3ae;
+    font-size:18px;
+}
+
+.terms-item p{
+    color:#667085;
+    font-size:16px;
+    line-height:30px;
+    margin:0;
+}
+
+
+/* LINKS*/
+
+.terms-card a{
+    color:#16b3ae;
+    text-decoration:none;
+}
+
+.terms-card a:hover{
+    text-decoration:underline;
+}
+
+
+/* SCROLLBAR */
+
+.terms-sidebar::-webkit-scrollbar{
+    width:6px;
+}
+
+.terms-sidebar::-webkit-scrollbar-thumb{
+    background:#16b3ae;
+    border-radius:20px;
+}
+
+
+/* TABLET */
+
+@media (max-width:991px){
+
+    .terms-sidebar{
+        position:relative;
+        top:auto;
+        margin-bottom:30px;
+    }
+
+    .terms-card{
+        padding:30px;
+    }
+
+    .terms-card h2{
+        font-size:28px;
+    }
+
+}
+
+
+/* MOBILE*/
+
+@media (max-width:767px){
+
+    .terms-hero{
+        padding:55px 0;
+    }
+
+    .terms-section{
+        padding:35px 0;
+    }
+
+    .terms-hero h1{
+        font-size:28px;
+    }
+
+    .terms-hero p{
+        font-size:15px;
+        line-height:28px;
+    }
+
+    .terms-sidebar{
+        padding:18px;
+    }
+
+    .terms-sidebar h3{
+        font-size:20px;
+    }
+
+    .terms-sidebar li button{
+        padding:10px 12px;
+        font-size:14px;
+    }
+
+    .terms-card{
+        padding:18px;
+    }
+
+    .terms-card h2{
+        font-size:24px;
+    }
+
+    .terms-card .intro{
+        margin-bottom:25px;
+    }
+
+    .terms-item{
+        padding:22px 0;
+    }
+
+    .terms-item h4{
+        font-size:18px;
+    }
+
+    .terms-item p{
+        font-size:15px;
+        line-height:28px;
+    }
+
+}

@@ -1,0 +1,279 @@
+/*** Feature css ********/
+.features-wrapper {
+    background: #edf5f5;
+    border-radius: 15px;
+    padding: 25px 20px;
+}
+
+.feature-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.feature-icon {
+    width: 50px;
+    height: 50px;
+    padding: 8px;
+    border-radius: 50%;
+    background: #eef8f8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #0c2f57;
+    flex-shrink: 0;
+}
+.map_box{
+    height: fit-content;
+}
+.map_box {
+
+    position: relative;
+    overflow: hidden;
+    border-radius: 18px;
+    background: #fff;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, .05);
+    padding: 15px;
+
+}
+.map_box h4 {
+    font-size: 22px;
+    font-weight: 500;
+    margin-bottom: 15px;
+}
+.map-image {
+    height: 300px;
+}
+.map_box iframe {
+
+    width: 100%;
+    height: 100%;
+    border: 0;
+    filter: saturate(.95);
+
+}
+
+.feature-content h5 {
+    margin: 0 0 6px;
+    font-size: 15px;
+    font-weight: 600;
+    color: #16243d;
+}
+
+.feature-content p {
+    margin: 0;
+    font-size: 12px;
+    line-height: 16px;
+    color: #5b6778;
+}
+
+/* Responsive */
+@media (max-width:1199px) {
+    .feature-item{
+        flex-wrap: wrap;
+    }
+}
+
+@media (max-width:991px) {
+
+    .features-wrapper {
+        padding: 25px;
+    }
+
+    .feature-item {
+        margin-bottom: 20px;
+    }
+
+}
+
+@media (max-width:767px) {
+
+    .feature-item {
+        flex-direction: column;
+        text-align: center;
+    }
+    .map_box {
+        height: 220px;
+    }
+
+    .feature-section {
+        margin-top: 0px;
+    }
+
+    .hero-content p {
+        max-width: 85% !important;
+    }
+
+
+}
+
+/************Offer csss ********/
+.offer-section {
+    background: var(--off-white);
+}
+
+/* Card */
+
+.offer-card {
+    background: var(--white);
+    border-radius: var(--radius-xl);
+    padding: 20px;
+    box-shadow: var(--shadow-sm);
+
+}
+
+.offer-label {
+
+    display: block;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--dark-color);
+    margin-bottom: 20px;
+    letter-spacing: 1px;
+}
+
+/* Items */
+
+.offer-item {
+
+    text-align: center;
+
+    padding: 10px 10px 0px;
+
+    border-right: 1px solid var(--border-color) !important;
+
+    height: 100%;
+
+    transition: var(--transition);
+}
+
+.offer-section .row .col-md-4:last-child .offer-item {
+    border-right: 0px !important;
+}
+
+.offer-item:hover {
+
+    transform: translateY(-6px);
+}
+
+.offer-icon {
+    width: 100px;
+    height: 100px;
+    margin: 0 auto 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.offer-icon img {
+    width: 80%;
+    height: 80%;
+    object-fit: contain;
+}
+
+.offer-item h4 {
+
+    font-size: 16px;
+
+    font-weight: 600;
+
+    color: var(--dark-color);
+
+    margin-bottom: 10px;
+}
+
+.offer-item p {
+
+    color: var(--text-light);
+    font-size: 15px;
+    line-height: 20px;
+}
+
+/* Banner */
+
+.offer-banner {
+
+    height: 75%;
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+}
+section.offer-section {
+    padding-bottom: 0;
+}
+.offer-banner img {
+
+    width: 100%;
+
+    height: 100%;
+
+    object-fit: cover;
+}
+
+/* Responsive */
+
+@media(max-width:991px) {
+
+    .offer-card {
+        padding: 30px;
+    }
+    .offer-item {
+        padding: 15px;
+        height: auto;
+        margin-bottom: 10px;
+    }
+    .offer-banner {
+        height: 100%;
+    }
+    .offer-icon{
+        width: 80px;
+        height: 80px;
+    }
+}
+
+@media(max-width:767px) {
+
+    .offer-card {
+
+        padding: 20px;
+    }
+
+    .offer-item {
+
+        padding: 20px 15px;
+    }
+
+    .offer-icon {
+
+        width: 100px;
+
+        height: 100px;
+    }
+
+    .offer-item h4 {
+
+        font-size: 18px;
+    }
+
+    .offer-item {
+        border-bottom: 1px solid #e5e7eb !important;
+        border-right: 0px !important;
+    }
+
+    .offer-section .row .col-md-4:last-child .offer-item {
+
+        border-bottom: 0px !important;
+    }
+
+    .offer-label {
+        text-align: center;
+        margin-bottom: 10px;
+        font-size: 20px;
+    }
+
+    section {
+        padding: 50px 0;
+    }
+
+}
