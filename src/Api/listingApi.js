@@ -96,8 +96,53 @@ export const getListings = async (params = {}) => {
     }
 
     return data;
+
   } catch (error) {
     console.error("Listings API Error:", error);
+    throw error;
+  }
+};
+
+
+/**
+ * Get single listing by slug
+ */
+export const getListingBySlug = async (slug) => {
+  try {
+
+    if (!slug) {
+      throw new Error("Listing slug is required.");
+    }
+
+    const response = await fetch(
+      `${API_URL}/${encodeURIComponent(slug)}`,
+      {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+        },
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(
+        `Single listing API request failed with status ${response.status}`
+      );
+    }
+
+    const data = await response.json();
+
+    if (!data.status) {
+      throw new Error(
+        data.message || "Unable to fetch listing."
+      );
+    }
+
+    return data;
+
+  } catch (error) {
+
+    console.error("Single Listing API Error:", error);
 
     throw error;
   }

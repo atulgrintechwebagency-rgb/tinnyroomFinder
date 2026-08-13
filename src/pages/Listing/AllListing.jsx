@@ -1,4 +1,13 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, {
+    useCallback,
+    useEffect,
+    useMemo,
+    useState,
+} from "react";
+
+import {
+    useSearchParams,
+} from "react-router-dom";
 
 import Navbar from "../../component/Navbar";
 import Footer from "../../component/Footer";
@@ -15,6 +24,15 @@ const API_URL =
 
 
 const AllListing = () => {
+
+    /*
+    |--------------------------------------------------------------------------
+    | URL SEARCH PARAMS
+    |--------------------------------------------------------------------------
+    */
+
+    const [searchParams] = useSearchParams();
+
 
     /*
     |--------------------------------------------------------------------------
@@ -63,15 +81,69 @@ const AllListing = () => {
     |--------------------------------------------------------------------------
     | Filters
     |--------------------------------------------------------------------------
+    |
+    | These filters can come from:
+    |
+    | 1. Home page URL
+    | 2. ListingSearch component
+    |
     */
 
-    const [filters, setFilters] = useState({
-        location: "",
-        minRent: "",
-        maxRent: "",
-        roomType: "",
-        utilitiesIncluded: "",
-        moveInDate: null,
+    const [filters, setFilters] = useState(() => {
+
+        const urlMoveInDate =
+            searchParams.get("moveInDate");
+
+
+        let parsedDate = null;
+
+        if (urlMoveInDate) {
+
+            const parts =
+                urlMoveInDate.split("-");
+
+            if (parts.length === 3) {
+
+                const year =
+                    Number(parts[0]);
+
+                const month =
+                    Number(parts[1]) - 1;
+
+                const day =
+                    Number(parts[2]);
+
+                parsedDate =
+                    new Date(
+                        year,
+                        month,
+                        day
+                    );
+            }
+        }
+
+
+        return {
+
+            location:
+                searchParams.get("location") || "",
+
+            minRent:
+                searchParams.get("minRent") || "",
+
+            maxRent:
+                searchParams.get("maxRent") || "",
+
+            roomType:
+                searchParams.get("spaceType") || "",
+
+            utilitiesIncluded:
+                searchParams.get("utilitiesIncluded") || "",
+
+            moveInDate:
+                parsedDate,
+        };
+
     });
 
 
@@ -81,7 +153,8 @@ const AllListing = () => {
     |--------------------------------------------------------------------------
     */
 
-    const [sortBy, setSortBy] = useState("newest");
+    const [sortBy, setSortBy] =
+        useState("newest");
 
 
     /*
@@ -93,7 +166,8 @@ const AllListing = () => {
     const buildApiUrl = useCallback(
         (page = 1) => {
 
-            const params = new URLSearchParams();
+            const params =
+                new URLSearchParams();
 
 
             /*
@@ -102,8 +176,15 @@ const AllListing = () => {
             |--------------------------------------------------------------------------
             */
 
-            params.append("page", page);
-            params.append("per_page", "10");
+            params.append(
+                "page",
+                String(page)
+            );
+
+            params.append(
+                "per_page",
+                "10"
+            );
 
 
             /*
@@ -112,10 +193,14 @@ const AllListing = () => {
             |--------------------------------------------------------------------------
             */
 
-            if (filters.location) {
+            if (
+                filters.location &&
+                filters.location.trim() !== ""
+            ) {
+
                 params.append(
                     "location",
-                    filters.location
+                    filters.location.trim()
                 );
             }
 
@@ -164,7 +249,10 @@ const AllListing = () => {
             |--------------------------------------------------------------------------
             */
 
-            if (filters.roomType) {
+            if (
+                filters.roomType &&
+                filters.roomType !== ""
+            ) {
 
                 params.append(
                     "spaceType",
@@ -177,10 +265,11 @@ const AllListing = () => {
             |--------------------------------------------------------------------------
             | Utilities
             |--------------------------------------------------------------------------
+            |
             | IMPORTANT:
             |
-            | 1 = included
-            | 0 = not included
+            | Included     = 1
+            | Not Included = 0
             |
             */
 
@@ -192,7 +281,9 @@ const AllListing = () => {
 
                 params.append(
                     "utilitiesIncluded",
-                    String(filters.utilitiesIncluded)
+                    String(
+                        filters.utilitiesIncluded
+                    )
                 );
             }
 
@@ -205,17 +296,24 @@ const AllListing = () => {
 
             if (filters.moveInDate) {
 
-                const date = filters.moveInDate;
+                const date =
+                    filters.moveInDate;
 
-                const year = date.getFullYear();
 
-                const month = String(
-                    date.getMonth() + 1
-                ).padStart(2, "0");
+                const year =
+                    date.getFullYear();
 
-                const day = String(
-                    date.getDate()
-                ).padStart(2, "0");
+
+                const month =
+                    String(
+                        date.getMonth() + 1
+                    ).padStart(2, "0");
+
+
+                const day =
+                    String(
+                        date.getDate()
+                    ).padStart(2, "0");
 
 
                 const formattedDate =
@@ -229,13 +327,75 @@ const AllListing = () => {
             }
 
 
+            /*
+            |--------------------------------------------------------------------------
+            | SORTING
+            |--------------------------------------------------------------------------
+            |
+            | Pass API sorting as well.
+            |
+            */
+
+            if (sortBy === "newest") {
+
+                params.append(
+                    "sort",
+                    "created_at"
+                );
+
+                params.append(
+                    "order",
+                    "desc"
+                );
+            }
+
+
+            if (sortBy === "price") {
+
+                params.append(
+                    "sort",
+                    "rentMonthly"
+                );
+
+                params.append(
+                    "order",
+                    "asc"
+                );
+            }
+
+
+            if (sortBy === "popular") {
+
+                /*
+                 * There is currently no dedicated
+                 * popularity field in the API.
+                 *
+                 * Keep the frontend fallback sorting.
+                 */
+
+                params.append(
+                    "sort",
+                    "created_at"
+                );
+
+                params.append(
+                    "order",
+                    "desc"
+                );
+            }
+
+
             const finalUrl =
                 `${API_URL}?${params.toString()}`;
 
 
             return finalUrl;
+
         },
-        [filters]
+        [
+            filters,
+            sortBy,
+        ]
     );
 
 
@@ -255,7 +415,8 @@ const AllListing = () => {
                 setError("");
 
 
-                const url = buildApiUrl(page);
+                const url =
+                    buildApiUrl(page);
 
 
                 console.log(
@@ -264,17 +425,23 @@ const AllListing = () => {
                 );
 
 
-                const response = await fetch(url, {
-                    method: "GET",
-                    headers: {
-                        Accept: "application/json",
-                    },
-                });
+                const response =
+                    await fetch(
+                        url,
+                        {
+                            method: "GET",
+
+                            headers: {
+                                Accept:
+                                    "application/json",
+                            },
+                        }
+                    );
 
 
                 /*
                 |--------------------------------------------------------------------------
-                | HTTP Error
+                | HTTP ERROR
                 |--------------------------------------------------------------------------
                 */
 
@@ -285,6 +452,12 @@ const AllListing = () => {
                     );
                 }
 
+
+                /*
+                |--------------------------------------------------------------------------
+                | JSON
+                |--------------------------------------------------------------------------
+                */
 
                 const data =
                     await response.json();
@@ -298,7 +471,7 @@ const AllListing = () => {
 
                 /*
                 |--------------------------------------------------------------------------
-                | API Status
+                | API STATUS
                 |--------------------------------------------------------------------------
                 */
 
@@ -320,18 +493,16 @@ const AllListing = () => {
                 */
 
                 const apiListings =
-                    Array.isArray(data?.listings)
+                    Array.isArray(
+                        data?.listings
+                    )
                         ? data.listings
                         : [];
 
 
-                /*
-                |--------------------------------------------------------------------------
-                | Set Listings
-                |--------------------------------------------------------------------------
-                */
-
-                setListings(apiListings);
+                setListings(
+                    apiListings
+                );
 
 
                 /*
@@ -340,42 +511,62 @@ const AllListing = () => {
                 |--------------------------------------------------------------------------
                 */
 
-                if (data?.pagination) {
+                if (
+                    data?.pagination
+                ) {
 
                     setPagination({
+
                         current_page:
                             Number(
-                                data.pagination.current_page
+                                data.pagination
+                                    .current_page
                             ) || 1,
 
                         last_page:
                             Number(
-                                data.pagination.last_page
+                                data.pagination
+                                    .last_page
                             ) || 1,
 
                         total:
                             Number(
-                                data.pagination.total
-                            ) || apiListings.length,
+                                data.pagination
+                                    .total
+                            ) ||
+                            apiListings.length,
 
                         per_page:
                             Number(
-                                data.pagination.per_page
+                                data.pagination
+                                    .per_page
                             ) || 10,
+
                     });
 
                 } else {
 
                     setPagination({
-                        current_page: page,
-                        last_page: 1,
-                        total: apiListings.length,
-                        per_page: 10,
+
+                        current_page:
+                            page,
+
+                        last_page:
+                            1,
+
+                        total:
+                            apiListings.length,
+
+                        per_page:
+                            10,
+
                     });
                 }
 
 
-                setCurrentPage(page);
+                setCurrentPage(
+                    page
+                );
 
             } catch (err) {
 
@@ -389,47 +580,70 @@ const AllListing = () => {
 
 
                 setPagination({
-                    current_page: 1,
-                    last_page: 1,
-                    total: 0,
-                    per_page: 10,
+
+                    current_page:
+                        1,
+
+                    last_page:
+                        1,
+
+                    total:
+                        0,
+
+                    per_page:
+                        10,
+
                 });
 
 
                 setError(
-                    "Something went wrong while loading listings."
+                    "Unable to load listings. Please try again."
                 );
 
             } finally {
 
                 setLoading(false);
+
             }
 
         },
-        [buildApiUrl]
+        [
+            buildApiUrl
+        ]
     );
 
 
     /*
     |--------------------------------------------------------------------------
-    | Initial API Request
+    | INITIAL LOAD
     |--------------------------------------------------------------------------
+    |
+    | This loads:
+    |
+    | /all-listing
+    |
+    | OR
+    |
+    | /all-listing?location=...
+    |
     */
 
     useEffect(() => {
 
         fetchListings(1);
 
-    }, []);
+    }, [fetchListings]);
 
 
     /*
     |--------------------------------------------------------------------------
-    | Search / Filter Handler
+    | HANDLE SEARCH FROM LISTING SEARCH
     |--------------------------------------------------------------------------
     */
 
-    const handleSearch = (newFilters) => {
+    const handleSearch = (
+        newFilters
+    ) => {
 
         console.log(
             "Applying filters:",
@@ -437,171 +651,239 @@ const AllListing = () => {
         );
 
 
-        setFilters(newFilters);
+        setFilters({
+
+            location:
+                newFilters?.location ||
+                "",
+
+            minRent:
+                newFilters?.minRent ??
+                "",
+
+            maxRent:
+                newFilters?.maxRent ??
+                "",
+
+            roomType:
+                newFilters?.roomType ||
+                "",
+
+            utilitiesIncluded:
+                newFilters?.utilitiesIncluded ??
+                "",
+
+            moveInDate:
+                newFilters?.moveInDate ||
+                null,
+
+        });
+
 
         setCurrentPage(1);
+
     };
 
 
     /*
     |--------------------------------------------------------------------------
-    | Fetch again when filters change
+    | HANDLE SORT
     |--------------------------------------------------------------------------
     */
 
-    useEffect(() => {
+    const handleSort = (
+        sort
+    ) => {
 
-        /*
-        Don't run the first automatic request twice.
-        The initial request is handled above.
-        */
+        setSortBy(sort);
 
-        const hasFilters =
-            filters.location ||
-            filters.minRent !== "" ||
-            filters.maxRent !== "" ||
-            filters.roomType ||
-            filters.utilitiesIncluded !== "" ||
-            filters.moveInDate;
+        setCurrentPage(1);
 
-
-        if (!hasFilters) {
-            return;
-        }
-
-
-        fetchListings(1);
-
-    }, [filters]);
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | Pagination
-    |--------------------------------------------------------------------------
-    */
-
-    const handlePageChange = (page) => {
-
-        if (
-            page < 1 ||
-            page > pagination.last_page ||
-            loading
-        ) {
-            return;
-        }
-
-
-        fetchListings(page);
-
-
-        window.scrollTo({
-            top: 0,
-            behavior: "smooth",
-        });
     };
 
 
     /*
     |--------------------------------------------------------------------------
-    | Sorting
+    | PAGINATION
     |--------------------------------------------------------------------------
     */
 
-    const sortedListings = useMemo(() => {
+    const handlePageChange =
+        (page) => {
 
-        const sorted =
-            [...listings];
+            if (
+                page < 1 ||
+                page >
+                    pagination.last_page ||
+                loading
+            ) {
+
+                return;
+            }
 
 
-        if (sortBy === "price") {
-
-            sorted.sort(
-                (a, b) =>
-                    Number(a?.rentMonthly || 0) -
-                    Number(b?.rentMonthly || 0)
+            fetchListings(
+                page
             );
 
-        }
+
+            window.scrollTo({
+
+                top: 0,
+
+                behavior:
+                    "smooth",
+
+            });
+
+        };
 
 
-        if (sortBy === "newest") {
+    /*
+    |--------------------------------------------------------------------------
+    | FRONTEND SORTING
+    |--------------------------------------------------------------------------
+    |
+    | We keep this because the API may not support
+    | the sort field exactly as expected.
+    |
+    */
 
-            sorted.sort(
-                (a, b) =>
-                    Number(b?.id || 0) -
-                    Number(a?.id || 0)
-            );
+    const sortedListings =
+        useMemo(() => {
 
-        }
+            const sorted =
+                [...listings];
 
-
-        if (sortBy === "popular") {
 
             /*
             |--------------------------------------------------------------------------
-            | There is currently no popularity field in the
-            | API response.
-            |
-            | is_saved is used as the closest available value.
+            | PRICE
             |--------------------------------------------------------------------------
             */
 
-            sorted.sort(
-                (a, b) =>
-                    Number(b?.is_saved || 0) -
-                    Number(a?.is_saved || 0)
-            );
-        }
+            if (
+                sortBy === "price"
+            ) {
+
+                sorted.sort(
+                    (a, b) =>
+                        Number(
+                            a?.rentMonthly ||
+                            0
+                        ) -
+                        Number(
+                            b?.rentMonthly ||
+                            0
+                        )
+                );
+
+            }
 
 
-        return sorted;
+            /*
+            |--------------------------------------------------------------------------
+            | NEWEST
+            |--------------------------------------------------------------------------
+            */
 
-    }, [listings, sortBy]);
+            if (
+                sortBy === "newest"
+            ) {
+
+                sorted.sort(
+                    (a, b) =>
+                        Number(
+                            b?.id ||
+                            0
+                        ) -
+                        Number(
+                            a?.id ||
+                            0
+                        )
+                );
+
+            }
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | POPULAR
+            |--------------------------------------------------------------------------
+            */
+
+            if (
+                sortBy === "popular"
+            ) {
+
+                sorted.sort(
+                    (a, b) =>
+                        Number(
+                            b?.is_saved ||
+                            0
+                        ) -
+                        Number(
+                            a?.is_saved ||
+                            0
+                        )
+                );
+
+            }
+
+
+            return sorted;
+
+        }, [
+            listings,
+            sortBy,
+        ]);
 
 
     /*
     |--------------------------------------------------------------------------
-    | Skeleton Card
+    | SKELETON CARD
     |--------------------------------------------------------------------------
     */
 
-    const SkeletonCard = () => {
+    const SkeletonCard =
+        () => {
 
-        return (
+            return (
 
-            <div className="col-lg-4 col-md-6">
+                <div className="col-lg-4 col-md-6">
 
-                <div className="listing-card skeleton-card">
+                    <div className="listing-card skeleton-card">
 
-                    <div className="skeleton-image shimmer"></div>
-
-
-                    <div className="listing-card-body">
-
-                        <div className="skeleton-line skeleton-title shimmer"></div>
-
-                        <div className="skeleton-line skeleton-price shimmer"></div>
-
-                        <div className="skeleton-line skeleton-location shimmer"></div>
+                        <div className="skeleton-image shimmer"></div>
 
 
-                        <div className="skeleton-info">
+                        <div className="listing-card-body">
 
-                            <div className="skeleton-small shimmer"></div>
+                            <div className="skeleton-line skeleton-title shimmer"></div>
 
-                            <div className="skeleton-small shimmer"></div>
+                            <div className="skeleton-line skeleton-price shimmer"></div>
 
-                            <div className="skeleton-small shimmer"></div>
-
-                        </div>
+                            <div className="skeleton-line skeleton-location shimmer"></div>
 
 
-                        <div className="skeleton-tags">
+                            <div className="skeleton-info">
 
-                            <div className="skeleton-tag shimmer"></div>
+                                <div className="skeleton-small shimmer"></div>
 
-                            <div className="skeleton-tag shimmer"></div>
+                                <div className="skeleton-small shimmer"></div>
+
+                                <div className="skeleton-small shimmer"></div>
+
+                            </div>
+
+
+                            <div className="skeleton-tags">
+
+                                <div className="skeleton-tag shimmer"></div>
+
+                                <div className="skeleton-tag shimmer"></div>
+
+                            </div>
 
                         </div>
 
@@ -609,41 +891,46 @@ const AllListing = () => {
 
                 </div>
 
-            </div>
-        );
-    };
+            );
+
+        };
 
 
     /*
     |--------------------------------------------------------------------------
-    | Skeleton List
+    | SKELETON LIST
     |--------------------------------------------------------------------------
     */
 
-    const SkeletonListings = () => {
+    const SkeletonListings =
+        () => {
 
-        return (
+            return (
 
-            <div className="row g-3">
+                <div className="row g-3">
 
-                {Array.from({
-                    length: 6
-                }).map((_, index) => (
+                    {Array.from({
+                        length: 6,
+                    }).map(
+                        (_, index) => (
 
-                    <SkeletonCard
-                        key={index}
-                    />
+                            <SkeletonCard
+                                key={index}
+                            />
 
-                ))}
+                        )
+                    )}
 
-            </div>
-        );
-    };
+                </div>
+
+            );
+
+        };
 
 
     /*
     |--------------------------------------------------------------------------
-    | Render
+    | RENDER
     |--------------------------------------------------------------------------
     */
 
@@ -663,23 +950,21 @@ const AllListing = () => {
 
                         {/* =================================================
                             MAIN CONTENT
-                        ================================================== */}
+                        ================================================= */}
 
                         <div className="col-lg-9">
 
 
-                            {/* =================================================
-                                SEARCH
-                            ================================================== */}
+                            {/* SEARCH */}
 
                             <ListingSearch
-                                onSearch={handleSearch}
+                                onSearch={
+                                    handleSearch
+                                }
                             />
 
 
-                            {/* =================================================
-                                TOOLBAR
-                            ================================================== */}
+                            {/* TOOLBAR */}
 
                             <div className="listing-toolbar">
 
@@ -704,15 +989,17 @@ const AllListing = () => {
                                     {/* NEWEST */}
 
                                     <button
+                                        type="button"
                                         className={`sort-btn ${
                                             sortBy === "newest"
                                                 ? "active"
                                                 : ""
                                         }`}
                                         onClick={() =>
-                                            setSortBy("newest")
+                                            handleSort(
+                                                "newest"
+                                            )
                                         }
-                                        type="button"
                                     >
                                         Newest
                                     </button>
@@ -721,15 +1008,17 @@ const AllListing = () => {
                                     {/* PRICE */}
 
                                     <button
+                                        type="button"
                                         className={`sort-btn ${
                                             sortBy === "price"
                                                 ? "active"
                                                 : ""
                                         }`}
                                         onClick={() =>
-                                            setSortBy("price")
+                                            handleSort(
+                                                "price"
+                                            )
                                         }
-                                        type="button"
                                     >
                                         Price: Low to High
                                     </button>
@@ -738,15 +1027,17 @@ const AllListing = () => {
                                     {/* POPULAR */}
 
                                     <button
+                                        type="button"
                                         className={`sort-btn ${
                                             sortBy === "popular"
                                                 ? "active"
                                                 : ""
                                         }`}
                                         onClick={() =>
-                                            setSortBy("popular")
+                                            handleSort(
+                                                "popular"
+                                            )
                                         }
-                                        type="button"
                                     >
                                         Most Popular
                                     </button>
@@ -756,27 +1047,22 @@ const AllListing = () => {
                             </div>
 
 
-                            {/* =================================================
-                                ERROR
-                            ================================================== */}
+                            {/* ERROR */}
 
-                            {!loading && error && (
+                            {!loading &&
+                                error && (
 
-                                <div
-                                    className="alert alert-danger"
-                                    role="alert"
-                                >
+                                    <div
+                                        className="alert alert-danger"
+                                        role="alert"
+                                    >
+                                        {error}
+                                    </div>
 
-                                    {error}
-
-                                </div>
-
-                            )}
+                                )}
 
 
-                            {/* =================================================
-                                LOADING SKELETON
-                            ================================================== */}
+                            {/* SKELETON */}
 
                             {loading && (
 
@@ -785,13 +1071,12 @@ const AllListing = () => {
                             )}
 
 
-                            {/* =================================================
-                                LISTINGS
-                            ================================================== */}
+                            {/* LISTINGS */}
 
                             {!loading &&
                                 !error &&
-                                sortedListings.length > 0 && (
+                                sortedListings.length >
+                                    0 && (
 
                                     <div className="row g-3">
 
@@ -800,24 +1085,42 @@ const AllListing = () => {
 
                                                 <div
                                                     className="col-lg-4 col-md-6"
-                                                    key={room.id}
+                                                    key={
+                                                        room.id
+                                                    }
                                                 >
 
                                                     <ListingCard
                                                         room={{
+
                                                             ...room,
+
 
                                                             /*
                                                             |--------------------------------------------------------------------------
-                                                            | Map API fields to existing ListingCard design
+                                                            | IMAGE
                                                             |--------------------------------------------------------------------------
                                                             */
 
                                                             image:
                                                                 room.image,
 
+
+                                                            /*
+                                                            |--------------------------------------------------------------------------
+                                                            | TITLE
+                                                            |--------------------------------------------------------------------------
+                                                            */
+
                                                             title:
                                                                 room.title,
+
+
+                                                            /*
+                                                            |--------------------------------------------------------------------------
+                                                            | LOCATION
+                                                            |--------------------------------------------------------------------------
+                                                            */
 
                                                             location:
                                                                 `${room.city || ""}${
@@ -826,20 +1129,55 @@ const AllListing = () => {
                                                                         : ""
                                                                 }`,
 
+
+                                                            /*
+                                                            |--------------------------------------------------------------------------
+                                                            | PRICE
+                                                            |--------------------------------------------------------------------------
+                                                            */
+
                                                             price:
                                                                 room.rentMonthly,
+
+
+                                                            /*
+                                                            |--------------------------------------------------------------------------
+                                                            | BED
+                                                            |--------------------------------------------------------------------------
+                                                            */
 
                                                             bed:
                                                                 room.bedrooms,
 
+
+                                                            /*
+                                                            |--------------------------------------------------------------------------
+                                                            | BATH
+                                                            |--------------------------------------------------------------------------
+                                                            */
+
                                                             bath:
                                                                 room.bathrooms,
+
+
+                                                            /*
+                                                            |--------------------------------------------------------------------------
+                                                            | AREA
+                                                            |--------------------------------------------------------------------------
+                                                            */
 
                                                             area:
                                                                 room.area ||
                                                                 room.squareFeet ||
                                                                 room.sqft ||
                                                                 0,
+
+
+                                                            /*
+                                                            |--------------------------------------------------------------------------
+                                                            | NEW
+                                                            |--------------------------------------------------------------------------
+                                                            */
 
                                                             isNew:
                                                                 Array.isArray(
@@ -848,6 +1186,13 @@ const AllListing = () => {
                                                                 room.verificationBadges.includes(
                                                                     "New"
                                                                 ),
+
+
+                                                            /*
+                                                            |--------------------------------------------------------------------------
+                                                            | TAGS
+                                                            |--------------------------------------------------------------------------
+                                                            */
 
                                                             tags:
                                                                 Array.isArray(
@@ -858,6 +1203,7 @@ const AllListing = () => {
                                                                           2
                                                                       )
                                                                     : [],
+
                                                         }}
                                                     />
 
@@ -871,13 +1217,12 @@ const AllListing = () => {
                                 )}
 
 
-                            {/* =================================================
-                                NO RESULTS
-                            ================================================== */}
+                            {/* NO RESULTS */}
 
                             {!loading &&
                                 !error &&
-                                sortedListings.length === 0 && (
+                                sortedListings.length ===
+                                    0 && (
 
                                     <div className="no-listings">
 
@@ -895,13 +1240,12 @@ const AllListing = () => {
                                 )}
 
 
-                            {/* =================================================
-                                PAGINATION
-                            ================================================== */}
+                            {/* PAGINATION */}
 
                             {!loading &&
                                 !error &&
-                                pagination.last_page > 1 && (
+                                pagination.last_page >
+                                    1 && (
 
                                     <Pagination
                                         currentPage={
@@ -922,7 +1266,7 @@ const AllListing = () => {
 
                         {/* =================================================
                             MAP
-                        ================================================== */}
+                        ================================================= */}
 
                         <div className="col-lg-3">
 
@@ -976,7 +1320,9 @@ const AllListing = () => {
             <Footer />
 
         </>
+
     );
+
 };
 
 
