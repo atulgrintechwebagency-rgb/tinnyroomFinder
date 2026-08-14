@@ -8,6 +8,7 @@ import {
     Search,
     ChevronDown,
     SlidersHorizontal,
+    X,
 } from "lucide-react";
 
 import DatePicker from "react-datepicker";
@@ -27,9 +28,8 @@ const ListingSearch = ({ onSearch }) => {
 
     /*
     |--------------------------------------------------------------------------
-    | Location
+    | OPTIONS
     |--------------------------------------------------------------------------
-    | These values match the API data.
     */
 
     const locations = [
@@ -44,13 +44,6 @@ const ListingSearch = ({ onSearch }) => {
         "Austin",
     ];
 
-
-    /*
-    |--------------------------------------------------------------------------
-    | Budget
-    |--------------------------------------------------------------------------
-    | The value is kept in API-friendly format.
-    */
 
     const budgets = [
         {
@@ -76,14 +69,6 @@ const ListingSearch = ({ onSearch }) => {
     ];
 
 
-    /*
-    |--------------------------------------------------------------------------
-    | Room Types
-    |--------------------------------------------------------------------------
-    | IMPORTANT:
-    | These values must match API values exactly.
-    */
-
     const roomTypes = [
         "Private Room",
         "Studio/Loft",
@@ -92,16 +77,6 @@ const ListingSearch = ({ onSearch }) => {
         "Shared Space",
     ];
 
-
-    /*
-    |--------------------------------------------------------------------------
-    | Utilities
-    |--------------------------------------------------------------------------
-    | API expects:
-    |
-    | 1 = Utilities Included
-    | 0 = Utilities Not Included
-    */
 
     const utilitiesOptions = [
         {
@@ -117,7 +92,21 @@ const ListingSearch = ({ onSearch }) => {
 
     /*
     |--------------------------------------------------------------------------
-    | Handle Select Change
+    | CHECK IF ANY FILTER IS ACTIVE
+    |--------------------------------------------------------------------------
+    */
+
+    const hasActiveFilters =
+        searchData.location !== "" ||
+        searchData.budget !== "" ||
+        searchData.moveInDate !== null ||
+        searchData.roomType !== "" ||
+        searchData.utilities !== "";
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | HANDLE CHANGE
     |--------------------------------------------------------------------------
     */
 
@@ -134,7 +123,7 @@ const ListingSearch = ({ onSearch }) => {
 
     /*
     |--------------------------------------------------------------------------
-    | Date Change
+    | DATE CHANGE
     |--------------------------------------------------------------------------
     */
 
@@ -149,85 +138,120 @@ const ListingSearch = ({ onSearch }) => {
 
     /*
     |--------------------------------------------------------------------------
-    | Search
+    | SEARCH
     |--------------------------------------------------------------------------
     */
 
     const handleSearch = () => {
 
         const selectedBudget = budgets.find(
-            (budget) => budget.label === searchData.budget
+            (budget) =>
+                budget.label === searchData.budget
         );
 
 
         const filters = {
 
-            location: searchData.location || "",
+            location:
+                searchData.location || "",
 
-            minRent: selectedBudget
-                ? selectedBudget.minRent
-                : "",
+            minRent:
+                selectedBudget
+                    ? selectedBudget.minRent
+                    : "",
 
-            maxRent: selectedBudget
-                ? selectedBudget.maxRent
-                : "",
+            maxRent:
+                selectedBudget
+                    ? selectedBudget.maxRent
+                    : "",
 
-            roomType: searchData.roomType || "",
+            roomType:
+                searchData.roomType || "",
 
             utilitiesIncluded:
                 searchData.utilities !== ""
                     ? Number(searchData.utilities)
                     : "",
 
-            moveInDate: searchData.moveInDate || null,
+            moveInDate:
+                searchData.moveInDate || null,
         };
 
 
-        console.log("Applying filters:", filters);
+        console.log(
+            "Applying filters:",
+            filters
+        );
 
 
         if (typeof onSearch === "function") {
+
             onSearch(filters);
+
         }
     };
 
 
     /*
     |--------------------------------------------------------------------------
-    | Clear Filters
+    | CLEAR FILTERS
     |--------------------------------------------------------------------------
     */
 
     const handleClear = () => {
 
         const emptyFilters = {
+
             location: "",
+
             minRent: "",
+
             maxRent: "",
+
             roomType: "",
+
             utilitiesIncluded: "",
+
             moveInDate: null,
+
         };
 
 
+        /*
+        | Reset UI
+        */
+
         setSearchData({
+
             location: "",
+
             budget: "",
+
             moveInDate: null,
+
             roomType: "",
+
             utilities: "",
+
         });
 
 
+        /*
+        | Reset API results
+        */
+
         if (typeof onSearch === "function") {
+
             onSearch(emptyFilters);
+
         }
+
     };
 
 
     /*
     |--------------------------------------------------------------------------
-    | Render
+    | SEARCH FIELDS
     |--------------------------------------------------------------------------
     */
 
@@ -253,9 +277,7 @@ const ListingSearch = ({ onSearch }) => {
                 <div className="row g-3 align-items-center">
 
 
-                    {/* =====================================================
-                        LOCATION
-                    ====================================================== */}
+                    {/* LOCATION */}
 
                     <div className="col-xl col-lg-6">
 
@@ -274,16 +296,18 @@ const ListingSearch = ({ onSearch }) => {
                                     Location
                                 </option>
 
-                                {locations.map((location) => (
+                                {locations.map(
+                                    (location) => (
 
-                                    <option
-                                        key={location}
-                                        value={location}
-                                    >
-                                        {location}
-                                    </option>
+                                        <option
+                                            key={location}
+                                            value={location}
+                                        >
+                                            {location}
+                                        </option>
 
-                                ))}
+                                    )
+                                )}
 
                             </select>
 
@@ -297,9 +321,7 @@ const ListingSearch = ({ onSearch }) => {
                     </div>
 
 
-                    {/* =====================================================
-                        BUDGET
-                    ====================================================== */}
+                    {/* BUDGET */}
 
                     <div className="col-xl col-lg-6">
 
@@ -318,16 +340,18 @@ const ListingSearch = ({ onSearch }) => {
                                     Budget
                                 </option>
 
-                                {budgets.map((budget) => (
+                                {budgets.map(
+                                    (budget) => (
 
-                                    <option
-                                        key={budget.label}
-                                        value={budget.label}
-                                    >
-                                        {budget.label}
-                                    </option>
+                                        <option
+                                            key={budget.label}
+                                            value={budget.label}
+                                        >
+                                            {budget.label}
+                                        </option>
 
-                                ))}
+                                    )
+                                )}
 
                             </select>
 
@@ -341,9 +365,7 @@ const ListingSearch = ({ onSearch }) => {
                     </div>
 
 
-                    {/* =====================================================
-                        MOVE IN DATE
-                    ====================================================== */}
+                    {/* MOVE IN DATE */}
 
                     <div className="col-xl col-lg-6">
 
@@ -352,8 +374,12 @@ const ListingSearch = ({ onSearch }) => {
                             <CalendarDays size={18} />
 
                             <DatePicker
-                                selected={searchData.moveInDate}
-                                onChange={handleDateChange}
+                                selected={
+                                    searchData.moveInDate
+                                }
+                                onChange={
+                                    handleDateChange
+                                }
                                 placeholderText="Move In Date"
                                 className="form-control"
                                 dateFormat="dd/MM/yyyy"
@@ -365,9 +391,7 @@ const ListingSearch = ({ onSearch }) => {
                     </div>
 
 
-                    {/* =====================================================
-                        ROOM TYPE
-                    ====================================================== */}
+                    {/* ROOM TYPE */}
 
                     <div className="col-xl col-lg-6">
 
@@ -386,16 +410,18 @@ const ListingSearch = ({ onSearch }) => {
                                     Room Type
                                 </option>
 
-                                {roomTypes.map((roomType) => (
+                                {roomTypes.map(
+                                    (roomType) => (
 
-                                    <option
-                                        key={roomType}
-                                        value={roomType}
-                                    >
-                                        {roomType}
-                                    </option>
+                                        <option
+                                            key={roomType}
+                                            value={roomType}
+                                        >
+                                            {roomType}
+                                        </option>
 
-                                ))}
+                                    )
+                                )}
 
                             </select>
 
@@ -409,9 +435,7 @@ const ListingSearch = ({ onSearch }) => {
                     </div>
 
 
-                    {/* =====================================================
-                        UTILITIES
-                    ====================================================== */}
+                    {/* UTILITIES */}
 
                     <div className="col-xl col-lg-6">
 
@@ -422,7 +446,9 @@ const ListingSearch = ({ onSearch }) => {
                             <select
                                 className="form-select"
                                 name="utilities"
-                                value={searchData.utilities}
+                                value={
+                                    searchData.utilities
+                                }
                                 onChange={handleChange}
                             >
 
@@ -430,16 +456,18 @@ const ListingSearch = ({ onSearch }) => {
                                     Utilities
                                 </option>
 
-                                {utilitiesOptions.map((utility) => (
+                                {utilitiesOptions.map(
+                                    (utility) => (
 
-                                    <option
-                                        key={utility.value}
-                                        value={utility.value}
-                                    >
-                                        {utility.label}
-                                    </option>
+                                        <option
+                                            key={utility.value}
+                                            value={utility.value}
+                                        >
+                                            {utility.label}
+                                        </option>
 
-                                ))}
+                                    )
+                                )}
 
                             </select>
 
@@ -453,23 +481,45 @@ const ListingSearch = ({ onSearch }) => {
                     </div>
 
 
-                    {/* =====================================================
-                        SEARCH BUTTON
-                    ====================================================== */}
+                    {/* SEARCH + CLEAR */}
 
                     <div className="col-xl-auto col-lg-12">
 
-                        <button
-                            className="btn search-btn w-100"
-                            onClick={handleSearch}
-                            type="button"
-                        >
+                        <div className="d-flex gap-2">
 
-                            <Search size={18} />
+                            <button
+                                className="btn search-btn"
+                                onClick={handleSearch}
+                                type="button"
+                            >
 
-                            Search
+                                <Search size={18} />
 
-                        </button>
+                                Search
+
+                            </button>
+
+
+                            {/* CLEAR BUTTON */}
+
+                            {hasActiveFilters && (
+
+                                <button
+                                    className="btn clear-filter-btn"
+                                    onClick={handleClear}
+                                    type="button"
+                                    title="Clear filters"
+                                >
+
+                                    <X size={17} />
+
+                                    Clear
+
+                                </button>
+
+                            )}
+
+                        </div>
 
                     </div>
 
@@ -551,9 +601,7 @@ const ListingSearch = ({ onSearch }) => {
                     <div className="row g-3">
 
 
-                        {/* =================================================
-                            LOCATION
-                        ================================================== */}
+                        {/* LOCATION */}
 
                         <div className="col-12">
 
@@ -564,7 +612,9 @@ const ListingSearch = ({ onSearch }) => {
                                 <select
                                     className="form-select"
                                     name="location"
-                                    value={searchData.location}
+                                    value={
+                                        searchData.location
+                                    }
                                     onChange={handleChange}
                                 >
 
@@ -572,16 +622,18 @@ const ListingSearch = ({ onSearch }) => {
                                         Location
                                     </option>
 
-                                    {locations.map((location) => (
+                                    {locations.map(
+                                        (location) => (
 
-                                        <option
-                                            key={location}
-                                            value={location}
-                                        >
-                                            {location}
-                                        </option>
+                                            <option
+                                                key={location}
+                                                value={location}
+                                            >
+                                                {location}
+                                            </option>
 
-                                    ))}
+                                        )
+                                    )}
 
                                 </select>
 
@@ -595,9 +647,7 @@ const ListingSearch = ({ onSearch }) => {
                         </div>
 
 
-                        {/* =================================================
-                            BUDGET
-                        ================================================== */}
+                        {/* BUDGET */}
 
                         <div className="col-6">
 
@@ -608,7 +658,9 @@ const ListingSearch = ({ onSearch }) => {
                                 <select
                                     className="form-select"
                                     name="budget"
-                                    value={searchData.budget}
+                                    value={
+                                        searchData.budget
+                                    }
                                     onChange={handleChange}
                                 >
 
@@ -616,16 +668,18 @@ const ListingSearch = ({ onSearch }) => {
                                         Budget
                                     </option>
 
-                                    {budgets.map((budget) => (
+                                    {budgets.map(
+                                        (budget) => (
 
-                                        <option
-                                            key={budget.label}
-                                            value={budget.label}
-                                        >
-                                            {budget.label}
-                                        </option>
+                                            <option
+                                                key={budget.label}
+                                                value={budget.label}
+                                            >
+                                                {budget.label}
+                                            </option>
 
-                                    ))}
+                                        )
+                                    )}
 
                                 </select>
 
@@ -639,9 +693,7 @@ const ListingSearch = ({ onSearch }) => {
                         </div>
 
 
-                        {/* =================================================
-                            ROOM TYPE
-                        ================================================== */}
+                        {/* ROOM TYPE */}
 
                         <div className="col-6">
 
@@ -652,7 +704,9 @@ const ListingSearch = ({ onSearch }) => {
                                 <select
                                     className="form-select"
                                     name="roomType"
-                                    value={searchData.roomType}
+                                    value={
+                                        searchData.roomType
+                                    }
                                     onChange={handleChange}
                                 >
 
@@ -660,16 +714,18 @@ const ListingSearch = ({ onSearch }) => {
                                         Room Type
                                     </option>
 
-                                    {roomTypes.map((roomType) => (
+                                    {roomTypes.map(
+                                        (roomType) => (
 
-                                        <option
-                                            key={roomType}
-                                            value={roomType}
-                                        >
-                                            {roomType}
-                                        </option>
+                                            <option
+                                                key={roomType}
+                                                value={roomType}
+                                            >
+                                                {roomType}
+                                            </option>
 
-                                    ))}
+                                        )
+                                    )}
 
                                 </select>
 
@@ -683,9 +739,7 @@ const ListingSearch = ({ onSearch }) => {
                         </div>
 
 
-                        {/* =================================================
-                            DATE
-                        ================================================== */}
+                        {/* DATE */}
 
                         <div className="col-6">
 
@@ -694,8 +748,12 @@ const ListingSearch = ({ onSearch }) => {
                                 <CalendarDays size={18} />
 
                                 <DatePicker
-                                    selected={searchData.moveInDate}
-                                    onChange={handleDateChange}
+                                    selected={
+                                        searchData.moveInDate
+                                    }
+                                    onChange={
+                                        handleDateChange
+                                    }
                                     placeholderText="Move In Date"
                                     className="form-control"
                                     dateFormat="dd/MM/yyyy"
@@ -708,9 +766,7 @@ const ListingSearch = ({ onSearch }) => {
                         </div>
 
 
-                        {/* =================================================
-                            UTILITIES
-                        ================================================== */}
+                        {/* UTILITIES */}
 
                         <div className="col-6">
 
@@ -721,7 +777,9 @@ const ListingSearch = ({ onSearch }) => {
                                 <select
                                     className="form-select"
                                     name="utilities"
-                                    value={searchData.utilities}
+                                    value={
+                                        searchData.utilities
+                                    }
                                     onChange={handleChange}
                                 >
 
@@ -729,16 +787,18 @@ const ListingSearch = ({ onSearch }) => {
                                         Utilities
                                     </option>
 
-                                    {utilitiesOptions.map((utility) => (
+                                    {utilitiesOptions.map(
+                                        (utility) => (
 
-                                        <option
-                                            key={utility.value}
-                                            value={utility.value}
-                                        >
-                                            {utility.label}
-                                        </option>
+                                            <option
+                                                key={utility.value}
+                                                value={utility.value}
+                                            >
+                                                {utility.label}
+                                            </option>
 
-                                    ))}
+                                        )
+                                    )}
 
                                 </select>
 
@@ -754,20 +814,26 @@ const ListingSearch = ({ onSearch }) => {
                     </div>
 
 
-                    {/* =====================================================
-                        MOBILE FOOTER
-                    ====================================================== */}
+                    {/* MOBILE FOOTER */}
 
                     <div className="filter-footer">
+
+                        {/* CLEAR */}
 
                         <button
                             className="btn btn-clear"
                             type="button"
                             onClick={handleClear}
                         >
+
+                            <X size={16} />
+
                             Clear All
+
                         </button>
 
+
+                        {/* APPLY */}
 
                         <button
                             className="btn search-btn"
@@ -775,6 +841,8 @@ const ListingSearch = ({ onSearch }) => {
                             onClick={handleSearch}
                             data-bs-dismiss="offcanvas"
                         >
+
+                            <Search size={17} />
 
                             Apply Filters
 
@@ -787,6 +855,7 @@ const ListingSearch = ({ onSearch }) => {
             </div>
 
         </div>
+
     );
 };
 

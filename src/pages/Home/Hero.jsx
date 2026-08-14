@@ -3,6 +3,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Hero.css";
+
 import {
     MapPin,
     CalendarDays,
@@ -11,87 +12,160 @@ import {
 } from "lucide-react";
 
 const Hero = () => {
+
     const navigate = useNavigate();
 
     const [activeTab, setActiveTab] = useState("rooms");
+
     const [moveInDate, setMoveInDate] = useState(null);
 
     const [location, setLocation] = useState("");
+
     const [budget, setBudget] = useState("");
+
+    /*------SEARCH------------*/
 
     const handleSearch = () => {
 
         const params = new URLSearchParams();
 
-        // Location
+
+        /*|------ LOCATION|-------------*/
+
         if (location.trim()) {
-            params.set("location", location.trim());
+
+            params.set(
+                "location",
+                location.trim()
+            );
+
         }
 
-        // Move-in date
+
+        /*-------- MOVE-IN DATE--------------*/
+
         if (moveInDate) {
-            const year = moveInDate.getFullYear();
-            const month = String(moveInDate.getMonth() + 1).padStart(2, "0");
-            const day = String(moveInDate.getDate()).padStart(2, "0");
+
+            const year =
+                moveInDate.getFullYear();
+
+            const month =
+                String(
+                    moveInDate.getMonth() + 1
+                ).padStart(2, "0");
+
+            const day =
+                String(
+                    moveInDate.getDate()
+                ).padStart(2, "0");
+
 
             params.set(
                 "moveInDate",
                 `${year}-${month}-${day}`
             );
+
         }
 
-        // Budget
-        if (budget) {
 
-            if (budget === "500") {
-                params.set("minRent", "0");
-                params.set("maxRent", "500");
-            }
+        /*--------- BUDGET-------*/
 
-            if (budget === "1000") {
-                params.set("minRent", "500");
-                params.set("maxRent", "1000");
-            }
+        if (budget === "500") {
 
-            if (budget === "1500") {
-                params.set("minRent", "1000");
-                params.set("maxRent", "1500");
-            }
+            params.set(
+                "minRent",
+                "0"
+            );
 
-            if (budget === "2000") {
-                params.set("minRent", "1500");
-                params.set("maxRent", "2000");
-            }
+            params.set(
+                "maxRent",
+                "500"
+            );
 
-            if (budget === "2000+") {
-                params.set("minRent", "2000");
-            }
         }
 
-        // Tab -> API spaceType
-        if (activeTab === "rooms") {
-            params.set("spaceType", "Private Room");
+
+        if (budget === "1000") {
+
+            params.set(
+                "minRent",
+                "500"
+            );
+
+            params.set(
+                "maxRent",
+                "1000"
+            );
+
         }
 
-        if (activeTab === "tiny") {
-            params.set("spaceType", "Tiny Home");
+
+        if (budget === "1500") {
+
+            params.set(
+                "minRent",
+                "1000"
+            );
+
+            params.set(
+                "maxRent",
+                "1500"
+            );
+
         }
 
-        if (activeTab === "shared") {
-            params.set("spaceType", "Shared Space");
+
+        if (budget === "2000") {
+
+            params.set(
+                "minRent",
+                "1500"
+            );
+
+            params.set(
+                "maxRent",
+                "2000"
+            );
+
         }
 
-        const queryString = params.toString();
+
+        if (budget === "2000+") {
+
+            params.set(
+                "minRent",
+                "2000"
+            );
+
+        }
+
+        /*|----- FINAL URL-- */
+
+        const queryString =
+            params.toString();
+
+
+        console.log(
+            "Hero Search URL:",
+            queryString
+                ? `/all-listing?${queryString}`
+                : "/all-listing"
+        );
+
 
         navigate(
             queryString
                 ? `/all-listing?${queryString}`
                 : "/all-listing"
         );
+
     };
 
+
     return (
+
         <section className="hero-section py-3 py-md-5">
+
             <div className="container">
 
                 <div className="hero-wrapper">
@@ -103,72 +177,86 @@ const Hero = () => {
                             <div className="hero-content py-3 py-md-3">
 
                                 <h1>
+
                                     Find Small Spaces. <br />
-                                    <span>Live Smart.</span>
+
+                                    <span>
+                                        Live Smart.
+                                    </span>
+
                                 </h1>
 
+
                                 <p>
-                                    Affordable tiny rooms, lofts, micro-apartments,
-                                    guest suites, and compact living options-perfect
+
+                                    Affordable tiny rooms, lofts,
+                                    micro-apartments, guest suites,
+                                    and compact living options-perfect
                                     for your lifestyle and budget.
+
                                 </p>
 
                             </div>
 
+
                             <div className="search-wrapper">
 
-                                {/* Tabs */}
+
+                                {/* === TABS=== */}
 
                                 <div className="room-tabs">
 
+
                                     <button
-                                        className={`tab-btn ${
-                                            activeTab === "rooms"
-                                                ? "active"
-                                                : ""
-                                        }`}
+                                        type="button"
+                                        className={`tab-btn ${activeTab === "rooms"
+                                            ? "active"
+                                            : ""
+                                            }`}
                                         onClick={() =>
                                             setActiveTab("rooms")
                                         }
                                     >
+
                                         Rooms
+
                                     </button>
 
+
                                     <button
-                                        className={`tab-btn ${
-                                            activeTab === "tiny"
-                                                ? "active"
-                                                : ""
-                                        }`}
+                                        type="button"
+                                        className={`tab-btn ${activeTab === "tiny"
+                                            ? "active"
+                                            : ""
+                                            }`}
                                         onClick={() =>
                                             setActiveTab("tiny")
                                         }
                                     >
+
                                         Tiny Homes
-                                    </button>
 
+                                    </button>
                                     <button
-                                        className={`tab-btn ${
-                                            activeTab === "shared"
-                                                ? "active"
-                                                : ""
-                                        }`}
+                                        type="button"
+                                        className={`tab-btn ${activeTab === "shared"
+                                            ? "active"
+                                            : ""
+                                            }`}
                                         onClick={() =>
-                                            setActiveTab("shared")
-                                        }
-                                    >
-                                        Shared Spaces
-                                    </button>
+                                            setActiveTab("shared")} > Shared Spaces
 
+                                    </button>
                                 </div>
 
-                                {/* Search Box */}
+                                {/* === SEARCH BOX=== */}
 
                                 <div className="search-box">
 
                                     <div className="row g-3 align-items-center">
 
-                                        {/* Location */}
+
+                                        {/* === LOCATION==== */}
 
                                         <div className="col-lg-4">
 
@@ -178,6 +266,7 @@ const Hero = () => {
                                                     size={18}
                                                     className="left-icon"
                                                 />
+
 
                                                 <input
                                                     type="text"
@@ -193,165 +282,137 @@ const Hero = () => {
                                             </div>
 
                                         </div>
-
-                                        {/* Move In Date */}
+                                        {/* ===== MOVE IN DATE======= */}
 
                                         <div className="col-lg-3">
-
                                             <div className="input-icon date-picker-box">
+                                                <CalendarDays size={18} className="left-icon" />
 
-                                                <CalendarDays
-                                                    size={18}
-                                                    className="left-icon"
-                                                />
 
                                                 <DatePicker
-                                                    selected={moveInDate}
+                                                    selected={
+                                                        moveInDate
+                                                    }
                                                     onChange={(date) =>
-                                                        setMoveInDate(date)
+                                                        setMoveInDate(
+                                                            date
+                                                        )
                                                     }
                                                     placeholderText="Move-in Date"
                                                     dateFormat="MMM dd, yyyy"
                                                     className="date-input"
+                                                    minDate={
+                                                        new Date()
+                                                    }
                                                 />
-
-                                                <ChevronDown
-                                                    size={18}
-                                                    className="dropdown-icon"
-                                                />
-
+                                                <ChevronDown size={18} className="dropdown-icon" />
                                             </div>
 
                                         </div>
 
-                                        {/* Budget */}
+
+                                        {/* ======= BUDGET======== */}
 
                                         <div className="col-lg-2">
-
                                             <div className="select-box">
 
-                                                <Tag
-                                                    size={18}
-                                                    className="left-icon"
-                                                />
-
-                                                <select
-                                                    value={budget}
-                                                    onChange={(e) =>
-                                                        setBudget(
-                                                            e.target.value
-                                                        )
-                                                    }
-                                                >
-
-                                                    <option value="">
-                                                        Budget
-                                                    </option>
-
-                                                    <option value="500">
-                                                        $0 - $500
-                                                    </option>
-
-                                                    <option value="1000">
-                                                        $500 - $1,000
-                                                    </option>
-
-                                                    <option value="1500">
-                                                        $1,000 - $1,500
-                                                    </option>
-
-                                                    <option value="2000">
-                                                        $1,500 - $2,000
-                                                    </option>
-
-                                                    <option value="2000+">
-                                                        $2,000+
-                                                    </option>
+                                                <Tag size={18} className="left-icon" />
+                                                <select value={budget} onChange={(e) =>
+                                                    setBudget(
+                                                        e.target.value)}  >
+                                                    <option value="">   Budget  </option>
+                                                    <option value="500">  $0 - $500 </option>
+                                                    <option value="1000"> $500 - $1,000 </option>
+                                                    <option value="1500">  $1,000 - $1,500 </option>
+                                                    <option value="2000"> $1,500 - $2,000</option>
+                                                    <option value="2000+">  $2,000+ </option>
 
                                                 </select>
-
-                                                <ChevronDown
-                                                    size={18}
-                                                    className="dropdown-icon"
-                                                />
-
+                                                <ChevronDown size={18} className="dropdown-icon" />
                                             </div>
 
                                         </div>
 
-                                        {/* Search */}
+
+                                        {/* == SEARCH BUTTON====== */}
 
                                         <div className="col-lg-3">
 
                                             <button
+                                                type="button"
                                                 className="search-btn w-100"
-                                                onClick={handleSearch}
+                                                onClick={
+                                                    handleSearch
+                                                }
                                             >
-
-                                                {activeTab === "rooms"
+                                                {activeTab ===
+                                                    "rooms"
                                                     ? "Search Rooms"
-                                                    : activeTab === "tiny"
-                                                    ? "Search Tiny Homes"
-                                                    : "Search Shared Spaces"}
-
+                                                    : activeTab ===
+                                                        "tiny"
+                                                        ? "Search Tiny Homes"  : "Search Shared Spaces"}
                                             </button>
 
                                         </div>
-
-                                        {/* Popular Searches */}
+                                        {/* =====POPULAR SEARCHES=== */}
 
                                         <div className="popular-searches">
 
                                             <span className="title">
                                                 Popular searches:
+
                                             </span>
+
+                                            {/* UNDER $1,000 */}
+
+                                            <button
+                                                type="button"
+                                                onClick={() => {
+
+                                                    setLocation("");
+
+                                                    setBudget(
+                                                        "1000"
+                                                    ); setMoveInDate( null ); }}> Under $1,000
+                                            </button>
+
+
+                                            {/* NEAR ME */}
 
                                             <button
                                                 type="button"
                                                 onClick={() => {
                                                     setLocation("");
-                                                    setBudget("1000");
-                                                }}
-                                            >
-                                                Under $1,000
-                                            </button>
-
-                                            <button
-                                                type="button"
-                                                onClick={() => {
                                                     setBudget("");
-                                                }}
-                                            >
+                                                    setMoveInDate(
+                                                        null
+                                                    ); }} >
                                                 Near Me
                                             </button>
 
+                                            {/* UTILITIES */}
+
                                             <button
                                                 type="button"
                                                 onClick={() => {
-                                                    setBudget("");
-                                                }}
-                                            >
+
+                                                    setBudget("");    }} >
                                                 Utilities Included
                                             </button>
 
+                                            {/* FURNISHED */}
+
                                             <button
                                                 type="button"
-                                                onClick={() => {
-                                                    setBudget("");
-                                                }}
-                                            >
+                                                onClick={() => { setBudget(""); }} >
                                                 Furnished
                                             </button>
 
+                                            {/* SHORT TERM */}
                                             <button
-                                                type="button"
-                                                onClick={() => {
-                                                    setBudget("");
-                                                }}
-                                            >
+                                                type="button" onClick={() => { setBudget("");  }}>
                                                 Short Term
                                             </button>
-
                                         </div>
 
                                     </div>
@@ -367,8 +428,11 @@ const Hero = () => {
                 </div>
 
             </div>
+
         </section>
+
     );
+
 };
 
 export default Hero;

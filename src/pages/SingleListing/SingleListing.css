@@ -508,3 +508,293 @@ top:0;
 margin-top:40px;
 }
 }
+
+/* =========================================================
+   SINGLE LISTING LOADING SKELETON
+========================================================= */
+
+.single-listing-skeleton {
+    padding: 20px 0 60px;
+}
+
+.skeleton-box {
+    position: relative;
+    overflow: hidden;
+    background: #e9edf1;
+    border-radius: 10px;
+}
+
+.skeleton-box::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    transform: translateX(-100%);
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.65),
+        transparent
+    );
+    animation: skeleton-loading 1.4s infinite;
+}
+
+@keyframes skeleton-loading {
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+.skeleton-back {
+    width: 150px;
+    height: 20px;
+}
+
+.skeleton-actions {
+    display: flex;
+    gap: 15px;
+}
+
+.skeleton-action {
+    width: 70px;
+    height: 20px;
+}
+
+.skeleton-main-image {
+    width: 100%;
+    height: 450px;
+    border-radius: 18px;
+}
+
+.skeleton-thumbnails {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.skeleton-thumb {
+    width: 100%;
+    height: 115px;
+    border-radius: 14px;
+}
+
+.skeleton-details {
+    margin-top: 35px;
+}
+
+.skeleton-title-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 30px;
+}
+
+.skeleton-title {
+    width: 280px;
+    height: 32px;
+    margin-bottom: 15px;
+}
+
+.skeleton-location {
+    width: 330px;
+    height: 18px;
+    margin-bottom: 12px;
+}
+
+.skeleton-rating {
+    width: 120px;
+    height: 18px;
+}
+
+.skeleton-price {
+    width: 100px;
+    height: 32px;
+}
+
+.skeleton-features {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 25px;
+    margin: 30px 0;
+    padding-bottom: 25px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.skeleton-feature {
+    width: 100px;
+    height: 20px;
+}
+
+.skeleton-tabs {
+    display: flex;
+    gap: 35px;
+    border-bottom: 1px solid #e5e7eb;
+    padding-bottom: 15px;
+    margin-bottom: 25px;
+}
+
+.skeleton-tab {
+    width: 80px;
+    height: 18px;
+}
+
+.skeleton-description {
+    padding-top: 10px;
+}
+
+.skeleton-line {
+    width: 95%;
+    height: 18px;
+    margin-bottom: 15px;
+}
+
+.skeleton-line.short {
+    width: 65%;
+}
+
+.skeleton-host-card {
+    min-height: 450px;
+}
+
+.skeleton-host-heading {
+    width: 150px;
+    height: 22px;
+    margin-bottom: 25px;
+}
+
+.skeleton-host-profile {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.skeleton-avatar {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.skeleton-host-text {
+    flex: 1;
+}
+
+.skeleton-host-name {
+    width: 110px;
+    height: 18px;
+    margin-bottom: 10px;
+}
+
+.skeleton-host-line {
+    width: 130px;
+    height: 12px;
+    margin-bottom: 7px;
+}
+
+.skeleton-host-line.short {
+    width: 100px;
+}
+
+.skeleton-message-button {
+    width: 100%;
+    height: 52px;
+    margin-top: 25px;
+    border-radius: 12px;
+}
+
+.skeleton-divider {
+    height: 1px;
+    background: #e5e7eb;
+    margin: 28px 0;
+}
+
+.skeleton-sidebar-line {
+    width: 90%;
+    height: 45px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    background: #eef1f4;
+    position: relative;
+    overflow: hidden;
+}
+
+.skeleton-sidebar-line::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    transform: translateX(-100%);
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255,255,255,.6),
+        transparent
+    );
+    animation: skeleton-loading 1.4s infinite;
+}
+
+.skeleton-secure {
+    width: 100%;
+    height: 80px;
+    margin-top: 15px;
+    border-radius: 14px;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 991px) {
+
+    .skeleton-main-image {
+        height: 350px;
+    }
+
+    .skeleton-title-row {
+        flex-direction: column;
+    }
+
+    .skeleton-price {
+        width: 120px;
+    }
+
+    .skeleton-host-card {
+        margin-top: 40px;
+    }
+}
+
+@media (max-width: 576px) {
+
+    .single-listing-skeleton {
+        padding-top: 10px;
+    }
+
+    .skeleton-main-image {
+        height: 240px;
+    }
+
+    .skeleton-thumbnails {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+
+    .skeleton-thumb {
+        height: 90px;
+    }
+
+    .skeleton-title {
+        width: 220px;
+    }
+
+    .skeleton-location {
+        width: 250px;
+    }
+
+    .skeleton-features {
+        gap: 15px;
+    }
+
+    .skeleton-tabs {
+        gap: 20px;
+        overflow: hidden;
+    }
+}
